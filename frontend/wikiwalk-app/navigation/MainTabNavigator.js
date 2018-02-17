@@ -5,20 +5,21 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import HomeScreen from '../screens/HomeScreen.js';
+import ListenScreen from '../screens/ListenScreen.js';
+import RecordScreen from '../screens/RecordScreen.js';
+import ListenNavigator from '../navigation/ListenNavigator.js';
 
 export default TabNavigator(
   {
     Home: {
       screen: HomeScreen,
     },
-    Links: {
-      screen: LinksScreen,
+    Listen: {
+      screen: ListenNavigator,
     },
-    Settings: {
-      screen: SettingsScreen,
+    Record: {
+      screen: RecordScreen,
     },
   },
   {
@@ -33,10 +34,10 @@ export default TabNavigator(
                 ? `ios-information-circle${focused ? '' : '-outline'}`
                 : 'md-information-circle';
             break;
-          case 'Links':
+          case 'Listen':
             iconName = Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link';
             break;
-          case 'Settings':
+          case 'Record':
             iconName =
               Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options';
         }
