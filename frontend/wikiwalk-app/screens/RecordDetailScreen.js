@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Button } from 'react-native';
-import { Audio } from 'expo';
+import { Alert, Text, View, ScrollView, StyleSheet, Button } from 'react-native';
+import { Audio, FileSystem } from 'expo';
 
 export default class RecordDetailScreen extends React.Component {
   static navigationOptions = {
@@ -14,10 +14,25 @@ export default class RecordDetailScreen extends React.Component {
     this.audio = new Audio.Sound();
     this.recording = new Audio.Recording();
     this.item = this.props.navigation.state.params.tour;
+
+    this.SAVE_FILE_URL = "http://35.178.74.228:8080/newEntry"
+
   }
 
-  ComponentDidUpdate() {
-    if (this.state.isPlayingAudio) {
+  async componentWillMount() {
+    console.log("enableing audio");
+    await Audio.setAudioModeAsync({
+      playsInSilentModeIOS: true,
+      allowsRecordingIOS: true,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_MIX_WITH_OTHERS,
+      shouldDuckAndroid: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+    });
+  }
+
+
+  componentDidUpdate() {
+    if (this.state.isRecordingAudio) {
       this._startRecording();
     } else {
       this._stopRecording();
@@ -26,11 +41,14 @@ export default class RecordDetailScreen extends React.Component {
 
   async _startRecording() {
     try {
-      await this.recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY);
+      console.log(await this.recording.getStatusAsync())
+      await this.recording.prepareToRecordAsync(RECORDING_OPTIONS_PRESET_LOW_QUALITY);
+      console.log(await this.recording.getStatusAsync())
       await this.recording.startAsync();
+      console.log(await this.recording.getStatusAsync())
       // You are now recording!
     } catch (error) {
-      // An error occurred!
+      console.log(error)
     }
   }
 
@@ -40,6 +58,35 @@ export default class RecordDetailScreen extends React.Component {
     } catch (error) {
 
     }
+    console.log(await this.recording.getStatusAsync())
+    console.log(this.recording.getURI())
+    console.log(JSON.stingify(await FileSystem.getInfoAsync(this.recording.getURI)))
+    let fileString = await FileSystem.readAsStringAsync(this.recording.getURI())
+    console.log(fileString)
+    FileSystem.deleteAsync(this.recording.getURI())
+  }
+
+  _sendRecording(fileString) {
+    fetch(SAVE_FILE_URL, {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        placeID: this.item.placeID,
+        title: "Test One Two",
+        file: fileString
+      }),
+    }).then((res) => {
+      if (res.status == 200) {
+        Alert.alert("Success!");
+      } else {
+        Alert.alert("I cri");
+      }
+    }).catch((error) => {
+      console.log(error)
+    })
   }
 
   _onRecordButtonPress() {
@@ -54,9 +101,32 @@ export default class RecordDetailScreen extends React.Component {
     return <View>
       <Button title="Record Me"
       onPress={this._onRecordButtonPress}/>
+      <Text>{this.state.isRecordingAudio ? "Recording" : "Not recording"}</Text>
     </View>
   }
 }
+
+const RECORDING_OPTIONS_PRESET_LOW_QUALITY: RecordingOptions = {
+  android: {
+    extension: '.3gp',
+    outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_THREE_GPP,
+    audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AMR_NB,
+    sampleRate: 44100,
+    numberOfChannels: 2,
+    bitRate: 128000,
+  },
+  ios: {
+    extension: '.m4a',
+    outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
+    audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MEDIUM,
+    sampleRate: 44100,
+    numberOfChannels: 1,
+    bitRate: 96400,
+    linearPCMBitDepth: 16,
+    linearPCMIsBigEndian: false,
+    linearPCMIsFloat: false,
+  },
+};
 
 const styles = StyleSheet.create({
   container: {
