@@ -27,7 +27,11 @@ exports.createEntry = (req, res) => {
   if (!fs.existsSync(dir + place_id)){
     fs.mkdirSync(dir + place_id);
     index = 0;
+
   } else {
+    if (!fs.existsSync(dir + place_id + '/entries.json')){
+      fs.writeFileSync(dir + place_id +'/entries.json', []);
+    }
     entries = fs.readFileSync(dir + place_id +'/entries.json', 'utf-8');
     oldData = JSON.parse(entries);
     index = oldData.length;
