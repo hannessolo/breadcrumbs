@@ -4,7 +4,10 @@ const dir = './data/landmarks/';
 exports.getTours = (req, res) => {
   var location = req.body.loc;
   if (!fs.existsSync(dir + location)){
-    res.sendStatus(500);
+    const output = {
+      tours: []
+    }
+    res.send(output);
   }
   data = fs.readFileSync(dir + location + '/entries.json', 'utf-8');
   const output = {
