@@ -14,9 +14,10 @@ exports.getTours = (req, res) => {
 }
 
 exports.createEntry = (req, res) => {
-  var location = req.body.loc;
-  var title = req.body.title;
-  var index;
+  const location = req.body.loc;
+  const title = req.body.title;
+  const audioFile = req.body.file;
+  let index;
   var oldData = [];
 
   if (!fs.existsSync(dir + location)){
@@ -28,7 +29,6 @@ exports.createEntry = (req, res) => {
     index = oldData.length;
     };
 
-
   var entry = {
     id: index,
     title: title,
@@ -36,6 +36,7 @@ exports.createEntry = (req, res) => {
     rating : 0
   }
 
+  fs.writeFileSync(dir + location + '/' + index + '.mp3', audioFile);
   const fd = fs.openSync(dir + location + '/entries.json', 'w');
     oldData.push(entry);
     fs.writeSync(fd, JSON.stringify(oldData));
@@ -53,13 +54,26 @@ function saveFile(location, id, data) {
   fs.writeFileSync(dir + location + '/entries.json', JSON.stringify(data));
 }
 
-exports.upRating = (req, res) => {
+exports.upVote = (req, res) => {
   const location = req.params.loc;
   const id = req.params.id;
   let data = loadFile(location, id);
   for (var i = 0; i < data.length; i++){
     if (data[i].id == id){
       data[i].rating += 1;
+    }
+  }
+  saveFile(location, id, data);
+  res.sendStatus(200);
+}
+
+exports.downVote = (req, res) => {
+  const location = req.params.loc;
+  const id = req.params.id;
+  let data = loadFile(location, id);
+  for (var i = 0; i < data.length; i++){
+    if (data[i].id == id){
+      data[i].rating -= 1;
     }
   }
   saveFile(location, id, data);

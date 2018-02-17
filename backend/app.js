@@ -12,10 +12,19 @@ app.set('port', 8080);
 app.use(express.static('./data'));
 app.use(bodyParser.json());
 
+// Takes 'lat', 'long'
 app.post('/landmarks', landmarkController.landmarks);
+
+// Takes 'loc', 'title', 'file'
 app.post('/newEntry', entryController.createEntry);
+
+// Takes 'loc'
 app.post('/tours', entryController.getTours);
+
+// Takes nothing
 app.post('/tours/:loc/:id/up', entryController.upVote);
+
+// Takes nothing
 app.post('/tours/:loc/:id/down', entryController.downVote);
 
 app.listen(app.get('port'), () => {

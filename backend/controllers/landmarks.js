@@ -3,8 +3,8 @@ const client = new Client();
 const GOOGLE_API_KEY = 'AIzaSyDJkOfaUfV7oRyQp5D_fKVQBRCkrXwscvA';
 
 exports.landmarks = (req, res) => {
-  var lat = req.body.lat;
-  var long = req.body.lon;
+  const lat = req.body.lat;
+  const long = req.body.lon;
 
   var types = 'university'
   var searchString = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='
