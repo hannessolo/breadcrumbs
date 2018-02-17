@@ -10,12 +10,9 @@ exports.landmarks = (req, res) => {
   var searchString = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='
   + lat + ',' + long
     + '&radius=500&type=' + types + '&key=' + GOOGLE_API_KEY;
-
-  console.log(searchString);
   var r = [];
   client.get(searchString, '', function (data, response) {
     var locations = data.results;
-    console.log(locations);
     if (locations.length == 0) {
       const output = {
         locName: "There are no landmarks",
@@ -26,11 +23,12 @@ exports.landmarks = (req, res) => {
       var address = locations[0].vicinity;
 
       for (var i = 0; i < locations.length; i++){
-        console.log(locations[i]);
         r.push(
           {
             name: locations[i].name,
-            placeID : locations[i].place_id
+            placeID : locations[i].place_id,
+            lat : locations[i].geometry.location.lat,
+            lon : locations[i].geometry.location.lng
           }
 
         );
