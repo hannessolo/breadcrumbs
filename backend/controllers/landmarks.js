@@ -17,20 +17,25 @@ exports.landmarks = (req, res) => {
     var locations = data.results;
     console.log(locations);
     if (locations.length == 0) {
-      res.sendStatus(404);
-        }
-    var address = locations[0].vicinity;
+      const output = {
+        locName: "There are no landmarks",
+        locations: []
+      }
+      res.send()
+    } else {
+      var address = locations[0].vicinity;
 
-    for (var i = 0; i < locations.length; i++){
-      console.log(locations[i]);
-      r.push(
-        locations[i].name
-      );
+      for (var i = 0; i < locations.length; i++){
+        console.log(locations[i]);
+        r.push(
+          locations[i].name
+        );
+      }
+      output = {
+        locName: address,
+        locations: r
+      }
+      res.json(output);
     }
-    output = {
-      locName: address,
-      locations: r
-    }
-    res.json(output);
   });
 };

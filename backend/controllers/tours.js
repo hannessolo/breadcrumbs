@@ -8,12 +8,13 @@ exports.getTours = (req, res) => {
       tours: []
     }
     res.send(output);
+  } else {
+    data = fs.readFileSync(dir + location + '/entries.json', 'utf-8');
+    const output = {
+      tours: JSON.parse(data)
+    }
+    res.send(output);
   }
-  data = fs.readFileSync(dir + location + '/entries.json', 'utf-8');
-  const output = {
-    tours: JSON.parse(data)
-  }
-  res.send(output);
 }
 
 exports.createEntry = (req, res) => {
