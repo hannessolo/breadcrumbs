@@ -49,7 +49,6 @@ export default class ListenDetailScreen extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <ScrollView style={styles.container} >
-        <Text>{this.props.navigation.state.params.location.placeID}</Text>
         <FlatList 
           data={this.state.tours}
           keyExtractor={this._keyExtractor}
