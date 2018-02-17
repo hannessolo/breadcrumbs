@@ -32,7 +32,7 @@ exports.createEntry = (req, res) => {
   var entry = {
     id: index,
     title: title,
-    filepath: dir + location + '/'+ index + '.mp3',
+    filepath: 'landmarks/' + location + '/'+ index + '.mp3',
     rating : 0
   }
 
