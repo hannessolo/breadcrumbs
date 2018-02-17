@@ -16,7 +16,7 @@ export default class ListenScreen extends React.Component {
       errorMessage: null,
     }
 
-    this.LANDMARKS_URL = "http://demo5974750.mockable.io/location";
+    this.LANDMARKS_URL = "http://35.178.74.228:8080/landmarks";
 
   }
 
@@ -45,7 +45,7 @@ export default class ListenScreen extends React.Component {
       }).then((res) => {
         return res.json();
       }).then((res) => {
-        this.setState({ landmarks: res["landmarks"] });
+        this.setState({ landmarks: res["locations"] });
       }).catch((err) => {
         Alert.alert();
       });
@@ -68,14 +68,19 @@ export default class ListenScreen extends React.Component {
     }
   }
 
+  _keyExtractor(item, index) {
+    return item.placeID;
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     return (
       <ScrollView style={styles.container} >
         <FlatList 
-          data={this.state.landmarks} 
+          data={this.state.landmarks}
+          keyExtractor={this._keyExtractor}
           renderItem={({item}) => (<View style={styles.row}>
-            <Text>{item}</Text>
+            <Text>{item.name}</Text>
             <Button title="View" onPress={() => navigate("ListenSpecific", {location: item})}/>
           </View>)}
         /> 
@@ -88,11 +93,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    backgroundColor: '#fff',
+    backgroundColor: '#eee',
   },
   row: {
     padding: 15,
     marginBottom: 5,
-    backgroundColor: 'skyblue',
+    backgroundColor: '#fff',
   },
 });

@@ -7,8 +7,8 @@ import Colors from '../constants/Colors';
 
 import HomeScreen from '../screens/HomeScreen.js';
 import ListenScreen from '../screens/ListenScreen.js';
-import RecordScreen from '../screens/RecordScreen.js';
 import ListenNavigator from '../navigation/ListenNavigator.js';
+import RecordNavigator from '../navigation/RecordNavigator.js';
 
 export default TabNavigator(
   {
@@ -19,7 +19,7 @@ export default TabNavigator(
       screen: ListenNavigator,
     },
     Record: {
-      screen: RecordScreen,
+      screen: RecordNavigator,
     },
   },
   {
