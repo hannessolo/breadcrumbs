@@ -18,7 +18,7 @@ exports.landmarks = (req, res) => {
         locName: "There are no landmarks",
         locations: []
       }
-      res.send()
+      res.send();
     } else {
       var address = locations[0].vicinity;
 

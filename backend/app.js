@@ -6,12 +6,14 @@ const path = require('path');
 // Controllers
 const landmarkController = require('./controllers/landmarks');
 const entryController = require('./controllers/tours');
+const testBox = require('./controllers/wiki');
 
 const app = express();
 app.set('port', 8080);
 app.use('/static', express.static(path.join(__dirname, 'data')));
 app.use(bodyParser.json());
 
+app.get('/', testBox.getIntro);
 // Takes 'lat', 'long'
 app.post('/landmarks', landmarkController.landmarks);
 

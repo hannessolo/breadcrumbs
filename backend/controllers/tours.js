@@ -18,8 +18,8 @@ exports.getTours = (req, res) => {
 }
 
 exports.createEntry = (req, res) => {
-  const place_id = req.body.placeID;
-  const title = req.body.title;
+  const place_id = req.get('placeID');
+  const title = req.get('tourTitle');
   const audioFile = req.body.file;
   let index;
   var oldData = [];
