@@ -13,6 +13,7 @@
     "client": "0.0.1",
     "express": "^4.16.2",
     "fs": "0.0.1-security",
-    "node-rest-client": "^3.1.0"
+    "node-rest-client": "^3.1.0",
+    "path": "^0.12.7"
   }
 }
