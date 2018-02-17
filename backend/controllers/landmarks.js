@@ -1,6 +1,6 @@
 const Client = require('node-rest-client').Client;
 const client = new Client();
-const GOOGLE_API_KEY = 'AIzaSyDJkOfaUfV7oRyQp5D_fKVQBRCkrXwscvA';
+const GOOGLE_API_KEY = 'AIzaSyBH-N0mLbH49eQWVXXYZZ8pkOkJAqnRXKk';
 
 exports.landmarks = (req, res) => {
   const lat = req.body.lat;
@@ -11,14 +11,15 @@ exports.landmarks = (req, res) => {
   + lat + ',' + long
     + '&radius=500&type=' + types + '&key=' + GOOGLE_API_KEY;
 
+  console.log(searchString);
   var r = [];
   client.get(searchString, '', function (data, response) {
     var locations = data.results;
-
+    console.log(locations);
     if (locations.length == 0) {
       res.sendStatus(404);
         }
-    var address = data.results[0].vicinity;
+    var address = locations[0].vicinity;
 
     for (var i = 0; i < locations.length; i++){
       console.log(locations[i]);
