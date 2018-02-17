@@ -28,7 +28,11 @@ exports.landmarks = (req, res) => {
       for (var i = 0; i < locations.length; i++){
         console.log(locations[i]);
         r.push(
-          locations[i].name
+          {
+            name: locations[i].name,
+            placeID : locations[i].place_id
+          }
+
         );
       }
       output = {

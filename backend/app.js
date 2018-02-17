@@ -15,10 +15,10 @@ app.use(bodyParser.json());
 // Takes 'lat', 'long'
 app.post('/landmarks', landmarkController.landmarks);
 
-// Takes 'loc', 'title', 'file'
+// Takes 'placeID', 'title', 'file'
 app.post('/newEntry', entryController.createEntry);
 
-// Takes 'loc'
+// Takes 'placeID'
 app.post('/tours', entryController.getTours);
 
 // Takes nothing
