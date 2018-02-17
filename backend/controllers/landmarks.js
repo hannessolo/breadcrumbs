@@ -14,6 +14,10 @@ exports.landmarks = (req, res) => {
   var r = [];
   client.get(searchString, '', function (data, response) {
     var locations = data.results;
+
+    if (locations.length == 0) {
+      res.sendStatus(404);
+        }
     var address = data.results[0].vicinity;
 
     for (var i = 0; i < locations.length; i++){
