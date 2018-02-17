@@ -41,11 +41,11 @@ exports.createEntry = (req, res) => {
   var entry = {
     id: index,
     title: title,
-    filepath: 'landmarks/' + place_id + '/'+ index + '.mp3',
+    filepath: 'landmarks/' + place_id + '/'+ index + '.m4a',
     rating : 0
   }
 
-  fs.writeFileSync(dir + place_id + '/' + index + '.mp3', audioFile);
+  fs.writeFileSync(dir + place_id + '/' + index + '.m4a', audioFile, 'base64');
   const fd = fs.openSync(dir + place_id + '/entries.json', 'w');
     oldData.push(entry);
     fs.writeSync(fd, JSON.stringify(oldData));
