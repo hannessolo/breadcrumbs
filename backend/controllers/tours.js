@@ -123,7 +123,7 @@ function createIntroAudio(loc, placeID){
 }
 
 function WordCount(str) {
-  let output = str.split(" ").slice(0,210);
+  let output = str.split(" ").slice(0,200);
   for (let i = output.length - 1; i >= 0; i--) {
     if (output[i].endsWith('.')){
       return output.slice(0, i + 1).join(' ');
