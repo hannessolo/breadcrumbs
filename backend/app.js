@@ -28,10 +28,10 @@ app.post('/newEntry', upload.single('file'), entryController.createEntry);
 app.post('/tours', jsonParser, entryController.getTours);
 
 // Takes nothing
-app.post('/tours/:loc/:id/up', jsonParser, entryController.upVote);
+app.get('/tours/:placeID/:id/up', entryController.upVote);
 
 // Takes nothing
-app.post('/tours/:loc/:id/down', jsonParser, entryController.downVote);
+app.get('/tours/:placeID/:id/down', entryController.downVote);
 
 app.listen(app.get('port'), () => {
   console.log('App is running at http://localhost:8080');
