@@ -1,6 +1,6 @@
 const Client = require('node-rest-client').Client;
 const client = new Client();
-const GOOGLE_API_KEY = 'AIzaSyBH-N0mLbH49eQWVXXYZZ8pkOkJAqnRXKk';
+const GOOGLE_API_KEY = 'AIzaSyC8HELNflQ2LjsXJCrcmnbQ9UyJyUgJWo8';
 
 exports.landmarks = (req, res) => {
   const lat = req.body.lat;
