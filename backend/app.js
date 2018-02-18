@@ -17,7 +17,7 @@ jsonParser = bodyParser.json();
 
 app.use('/static', express.static(path.join(__dirname, 'data')));
 
-app.get('/', jsonParser, testBox.getIntro);
+//app.get('/', jsonParser, testBox.getIntro);
 // Takes 'lat', 'long'
 app.post('/landmarks', jsonParser, landmarkController.landmarks);
 

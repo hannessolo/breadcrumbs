@@ -1,20 +1,34 @@
-var fs = require('fs');
 const dir = './data/landmarks/';
+const Client = require('node-rest-client').Client;
+const client = new Client();
+const textToSpeechAPI = 'ad9f51d8690e4ab0ac046f441a013edd';
+const fs = require('fs');
+var request = require('request');
 
 exports.getTours = (req, res) => {
-  var place_id = req.body.placeID;
+  const place_id = req.body.placeID;
+  const loc = req.body.placeName;
+  let output;
   if (!fs.existsSync(dir + place_id)){
-    const output = {
-      tours: []
+    fs.mkdirSync(dir + place_id);
+    output = {
+      tours: [{
+        id: 'intro',
+        title: '[Generated] Basic tour',
+        filepath: dir + place_id + '/intro.mp3',
+        rating: 0
+      }]
     }
-    res.send(output);
+
+    createIntroAudio(loc, place_id);
   } else {
     data = fs.readFileSync(dir + place_id + '/entries.json', 'utf-8');
-    const output = {
+    output = {
       tours: JSON.parse(data)
     }
-    res.send(output);
   }
+  fs.writeFileSync(dir + place_id +'/entries.json', JSON.stringify(output.tours));
+  res.send(output);
 }
 
 exports.createEntry = (req, res) => {
@@ -36,7 +50,7 @@ exports.createEntry = (req, res) => {
     entries = fs.readFileSync(dir + place_id +'/entries.json', 'utf-8');
     oldData = JSON.parse(entries);
     index = oldData.length;
-    };
+  };
 
   var entry = {
     id: index,
@@ -47,16 +61,16 @@ exports.createEntry = (req, res) => {
   fs.copyFileSync('./data/temp/' + fileName, dir + place_id + '/' + index + '.m4a');
   fs.unlinkSync('./data/temp/' + fileName);
   const fd = fs.openSync(dir + place_id + '/entries.json', 'w');
-    oldData.push(entry);
-    fs.writeSync(fd, JSON.stringify(oldData));
-    fs.closeSync(fd);
-    res.sendStatus(200);
+  oldData.push(entry);
+  fs.writeSync(fd, JSON.stringify(oldData));
+  fs.closeSync(fd);
+  res.sendStatus(200);
 }
 
 function loadFile(place_id, id) {
-    data = fs.readFileSync(dir + place_id + '/entries.json', 'utf-8');
-    data = JSON.parse(data);
-    return data;
+  data = fs.readFileSync(dir + place_id + '/entries.json', 'utf-8');
+  data = JSON.parse(data);
+  return data;
 }
 
 function saveFile(place_id, id, data) {
@@ -87,4 +101,27 @@ exports.downVote = (req, res) => {
   }
   saveFile(place_id, id, data);
   res.sendStatus(200);
+}
+
+function createIntroAudio(loc, placeID){
+  const location = loc;
+  const place_id = placeID;
+  let searchString = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro&titles=" + location + "&format=json";
+  client.get(searchString, '', function (data, response) {
+    var values = Object.values(data.query.pages);
+    let extract = JSON.stringify(values[0].extract).replace(/<\/?[^>]+(>|$)/g, "").replace(/\\n/g, ' ');
+    extract = WordCount(extract);
+
+    var musicLink = 'http://api.voicerss.org/?key=' + textToSpeechAPI + '&hl=en-us&src=' + extract;
+    client.get(musicLink, '', function(data, response) {
+      data.length;
+      console.log(musicLink);
+      fs.writeFileSync('./data/landmarks/' + place_id + '/intro.mp3', data);
+      return;
+    })
+  });
+}
+
+function WordCount(str) {
+  return str.split(" ").slice(0,200).join(' ');
 }
