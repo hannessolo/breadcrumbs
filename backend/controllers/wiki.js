@@ -1,6 +1,6 @@
 const Client = require('node-rest-client').Client;
 const client = new Client();
-const textToSpeechAPI = 'ad9f51d8690e4ab0ac046f441a013edd';
+const textToSpeechAPI = 'd5537ddec597441e982b802e882dfc44';
 const fs = require('fs');
 const request = require('request');
 
