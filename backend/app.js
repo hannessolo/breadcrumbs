@@ -24,7 +24,7 @@ app.post('/landmarks', jsonParser, landmarkController.landmarks);
 // Takes 'placeID', 'title', 'file'
 app.post('/newEntry', upload.single('file'), entryController.createEntry);
 
-// Takes 'placeID'
+// Takes 'placeID', 'placeName'
 app.post('/tours', jsonParser, entryController.getTours);
 
 // Takes nothing
