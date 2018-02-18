@@ -20,10 +20,9 @@ exports.getTours = (req, res) => {
 exports.createEntry = (req, res) => {
   const place_id = req.get('placeID');
   const title = req.get('tourTitle');
-  console.log(req);
-  const audioFile = req;
   let index;
   var oldData = [];
+  const fileName = fs.readdirSync('./data/temp')[0];
 
   if (!fs.existsSync(dir + place_id)){
     fs.mkdirSync(dir + place_id);
@@ -45,8 +44,8 @@ exports.createEntry = (req, res) => {
     filepath: 'landmarks/' + place_id + '/'+ index + '.m4a',
     rating : 0
   }
-
-  fs.writeFileSync(dir + place_id + '/' + index + '.m4a', audioFile, 'base64');
+  fs.copyFileSync('./data/temp' + fileName, dir + place_id + '/' + index + '.m4a');
+  fs.unlinkSync('./data/temp' + fileName);
   const fd = fs.openSync(dir + place_id + '/entries.json', 'w');
     oldData.push(entry);
     fs.writeSync(fd, JSON.stringify(oldData));

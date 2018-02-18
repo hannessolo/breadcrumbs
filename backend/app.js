@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-const upload = multer({dest:'./data'});
+const upload = multer({dest:'./data/temp'});
 
 // Controllers
 const landmarkController = require('./controllers/landmarks');
