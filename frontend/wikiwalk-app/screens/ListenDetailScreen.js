@@ -36,9 +36,14 @@ export default class ListenDetailScreen extends React.Component {
     ).then((res) => {
       return res.json();
     }).then((res) => {
+      res.tours.sort((a, b) => {
+        return b.rating - a.rating
+      })
       this.setState({
         tours: res.tours
       })
+    }).catch((err) => {
+      console.log(err)
     })
   }
 

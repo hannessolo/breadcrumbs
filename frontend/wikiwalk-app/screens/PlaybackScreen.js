@@ -10,7 +10,11 @@ export default class PlaybackScreen extends React.Component {
 
   constructor(props) {
         super(props);
-        this.state = { isPlayingAudio: false, text: "Is Playing Audio" }
+        this.state = { 
+          isPlayingAudio: false, 
+          text: "Is Playing Audio",
+          upvotes: 0
+        }
         this._onButtonPress = this._onButtonPress.bind(this);
         this._onUpvote = this._onUpvote.bind(this);
         this._onDownvote = this._onDownvote.bind(this);
@@ -28,6 +32,12 @@ export default class PlaybackScreen extends React.Component {
 
     }
 
+    componentWillMount() {
+      this.setState({
+        upvotes: this.item.rating
+      });
+    }
+
     componentDidUpdate() {
         try {
             if (this.state.isPlayingAudio) {
@@ -41,10 +51,18 @@ export default class PlaybackScreen extends React.Component {
     }
 
     _onUpvote() {
+      upvotes = this.state.upvotes + 1
+      this.setState({
+        upvotes: upvotes
+      })
       fetch("http://35.178.74.228:8080/tours/" + this.props.navigation.state.params.loc + "/" + this.item.id + "/up")
     }
 
     _onDownvote() {
+      upvotes = this.state.upvotes - 1
+      this.setState({
+        upvotes: upvotes
+      })
       fetch("http://35.178.74.228:8080/tours/" + this.props.navigation.state.params.loc + "/" + this.item.id + "/down")
     }
 
@@ -63,7 +81,7 @@ export default class PlaybackScreen extends React.Component {
               <Button style={styles.buttonStyle} onPress={this._onButtonPress} title="Play Recording"/>
               <View style={styles.votePanel}>
 
-                <Text style={{fontSize: 18}}>Upvotes: {this.item.rating}</Text>
+                <Text style={{fontSize: 18}}>Upvotes: {this.state.upvotes}</Text>
                 <View>
                   <TouchableHighlight onPress={this._onUpvote}>
                     <Ionicons size={32} name="ios-arrow-up"/>
