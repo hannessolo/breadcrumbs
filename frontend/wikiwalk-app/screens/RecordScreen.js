@@ -81,7 +81,7 @@ export default class RecordScreen extends React.Component {
           keyExtractor={this._keyExtractor}
           renderItem={({item}) => (<View style={styles.row}>
             <Text>{item.name}</Text>
-            <Button title="View" onPress={() => navigate("RecordSpecific", {location: item})}/>
+            <Button title="View" onPress={() => navigate("RecordSpecific", {tour: item})}/>
           </View>)}
         /> 
       </ScrollView>
