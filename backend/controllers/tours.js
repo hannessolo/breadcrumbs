@@ -20,15 +20,34 @@ exports.getTours = (req, res) => {
       }]
     }
 
-    createIntroAudio(loc, place_id);
+    var prm1 = new Promise((res, rej) => {
+      createIntroAudio(loc, place_id, 220, (isTrue) => {
+        res(isTrue);
+      });
+    });
+    prm1.then((isNotEmpty) => {
+      if (isNotEmpty){
+        console.log("Waited")
+        fs.writeFileSync(dir + place_id +'/entries.json', JSON.stringify(output.tours));
+        res.send(output);
+      } else {
+        console.log("Didnt wait wtf? "+ isNotEmpty);
+        output = {
+          tours:[]
+        }
+        fs.writeFileSync(dir + place_id +'/entries.json', JSON.stringify(output.tours));
+        res.send(output);
+      }
+
+    });
   } else {
     data = fs.readFileSync(dir + place_id + '/entries.json', 'utf-8');
     output = {
       tours: JSON.parse(data)
     }
+    fs.writeFileSync(dir + place_id +'/entries.json', JSON.stringify(output.tours));
+    res.send(output);
   }
-  fs.writeFileSync(dir + place_id +'/entries.json', JSON.stringify(output.tours));
-  res.send(output);
 }
 
 exports.createEntry = (req, res) => {
@@ -103,27 +122,36 @@ exports.downVote = (req, res) => {
   res.sendStatus(200);
 }
 
-function createIntroAudio(loc, placeID){
+function createIntroAudio(loc, placeID, wordLimit, callback){
   const location = loc;
   const place_id = placeID;
   let searchString = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro&titles=" + location + "&format=json";
+
   client.get(searchString, '', function (data, response) {
     var values = Object.values(data.query.pages);
+    if (values[0].extract == null){
+      console.log("Null value?");
+      callback (false);
+    }
     let extract = JSON.stringify(values[0].extract).replace(/<\/?[^>]+(>|$)/g, "").replace(/\\n/g, ' ');
-    extract = WordCount(extract);
+    extract = WordCount(extract, wordLimit);
 
     var musicLink = 'http://api.voicerss.org/?key=' + textToSpeechAPI + '&hl=en-us&src=' + extract;
     client.get(musicLink, '', function(data, response) {
-      data.length;
       console.log(musicLink);
       fs.writeFileSync('./data/landmarks/' + place_id + '/intro.mp3', data);
-      return;
+      if (fs.statSync('./data/landmarks/' + place_id + '/intro.mp3').size < 10000){
+        fs.unlinkSync('./data/landmarks/' + place_id + '/intro.mp3');
+        createIntroAudio(loc, placeID, wordLimit - 10, callback);
+      } else {
+        callback (true);
+      }
     })
   });
 }
 
-function WordCount(str) {
-  let output = str.split(" ").slice(0,200);
+function WordCount(str, wordCount) {
+  let output = str.split(" ").slice(0,wordCount);
   for (let i = output.length - 1; i >= 0; i--) {
     if (output[i].endsWith('.')){
       return output.slice(0, i + 1).join(' ');
