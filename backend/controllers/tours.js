@@ -44,8 +44,8 @@ exports.createEntry = (req, res) => {
     filepath: 'landmarks/' + place_id + '/'+ index + '.m4a',
     rating : 0
   }
-  fs.copyFileSync('./data/temp' + fileName, dir + place_id + '/' + index + '.m4a');
-  fs.unlinkSync('./data/temp' + fileName);
+  fs.copyFileSync('./data/temp/' + fileName, dir + place_id + '/' + index + '.m4a');
+  fs.unlinkSync('./data/temp/' + fileName);
   const fd = fs.openSync(dir + place_id + '/entries.json', 'w');
     oldData.push(entry);
     fs.writeSync(fd, JSON.stringify(oldData));
