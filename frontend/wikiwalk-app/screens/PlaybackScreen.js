@@ -16,6 +16,7 @@ export default class PlaybackScreen extends React.Component {
     }
 
     componentDidMount() {
+        this.audio = new Audio.Sound();
         let url = "http://35.178.74.228:8080/static/" + this.item.filepath
         this.audio.loadAsync({uri: url});
 
@@ -44,7 +45,8 @@ export default class PlaybackScreen extends React.Component {
       return (
 
           <View>
-              <Button onPress={this._onButtonPress} title="Button"/>
+              <Text style={styles.title}>{this.item.title}</Text>
+              <Button style={styles.buttonStyle} onPress={this._onButtonPress} title="Play Recording"/>
               <Text>{this.state.isPlayingAudio && this.state.text}</Text>
           </View>
 
@@ -58,4 +60,15 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     backgroundColor: '#fff',
   },
+  title: {
+    textAlign: 'center',
+    padding: 20,
+    fontSize: 30,
+    fontWeight: 'bold'
+  },
+  buttonStyle: {
+    marginTop: 30,
+    borderStyle: 'solid',
+
+  }
 });

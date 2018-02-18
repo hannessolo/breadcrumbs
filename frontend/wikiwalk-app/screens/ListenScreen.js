@@ -80,7 +80,7 @@ export default class ListenScreen extends React.Component {
           data={this.state.landmarks}
           keyExtractor={this._keyExtractor}
           renderItem={({item}) => (<View style={styles.row}>
-            <Text>{item.name}</Text>
+            <Text style={{textAlign: "center", fontWeight: "bold"}}>{item.name}</Text>
             <Button title="View" onPress={() => navigate("ListenSpecific", {location: item})}/>
           </View>)}
         /> 

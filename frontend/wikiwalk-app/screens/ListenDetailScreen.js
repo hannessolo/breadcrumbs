@@ -29,7 +29,8 @@ export default class ListenDetailScreen extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        placeID: this.props.navigation.state.params.location.placeID
+        placeID: this.props.navigation.state.params.location.placeID,
+        placeName: this.props.navigation.state.params.location.name
       }),
     }
     ).then((res) => {

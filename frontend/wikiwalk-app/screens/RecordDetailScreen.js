@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Text, View, ScrollView, StyleSheet, Button } from 'react-native';
+import { Alert, Text, View, ScrollView, StyleSheet, Button, TextInput } from 'react-native';
 import { Audio, FileSystem, MailComposer } from 'expo';
 
 export default class RecordDetailScreen extends React.Component {
@@ -9,7 +9,12 @@ export default class RecordDetailScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { isRecordingAudio: false, isPlayingAudio: false, text: "Is Playing Audio" }
+    this.state = { 
+      isRecordingAudio: false, 
+      isPlayingAudio: false, 
+      text: "Is Playing Audio",
+      title: "Title Here"
+    }
     this._onRecordButtonPress = this._onRecordButtonPress.bind(this);
     this.audio = new Audio.Sound();
     this.recording = new Audio.Recording();
@@ -42,6 +47,7 @@ export default class RecordDetailScreen extends React.Component {
   }
 
   async _startRecording() {
+    this.recording = new Audio.Recording();
     try {
       await this.recording.prepareToRecordAsync(RECORDING_OPTIONS_PRESET_LOW_QUALITY);
       await this.recording.startAsync();
@@ -75,7 +81,7 @@ export default class RecordDetailScreen extends React.Component {
     fetch(this.SAVE_FILE_URL, {
       headers: {
         placeID: this.item.placeID,
-        tourTitle: "troll",
+        tourTitle: this.state.title,
         'Content-Type': 'multipart/form-data'
       },
       method: 'POST',
@@ -84,29 +90,6 @@ export default class RecordDetailScreen extends React.Component {
     .catch(err => console.log(err))
 
     await FileSystem.deleteAsync(this.recording.getURI())
-  }
-
-  _sendRecording(fileString) {
-    fetch(SAVE_FILE_URL, {
-      method: 'POST',
-      headers: {
-        'accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        placeID: this.item.placeID,
-        title: "Test One Two",
-        file: fileString
-      }),
-    }).then((res) => {
-      if (res.status == 200) {
-        Alert.alert("Success!");
-      } else {
-        Alert.alert("I cri");
-      }
-    }).catch((error) => {
-      console.log(error)
-    })
   }
 
   _onRecordButtonPress() {
@@ -121,7 +104,12 @@ export default class RecordDetailScreen extends React.Component {
     return <View>
       <Button title="Record Me"
       onPress={this._onRecordButtonPress}/>
-      <Text>{this.state.isRecordingAudio ? "Recording" : "Not recording"}</Text>
+      <Text style={{padding: 20}}>{this.state.isRecordingAudio ? "Recording" : "Not recording"}</Text>
+      <TextInput
+        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+        onChangeText={(title) => this.setState({title})}
+        value={this.state.title}
+      />
     </View>
   }
 }
