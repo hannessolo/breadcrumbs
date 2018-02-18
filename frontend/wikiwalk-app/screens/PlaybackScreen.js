@@ -22,13 +22,14 @@ export default class PlaybackScreen extends React.Component {
         this.item = this.props.navigation.state.params.tour;
     }
 
-    componentDidMount() {
-        this.audio = new Audio.Sound();
+    async componentDidMount() {
         let url = "http://35.178.74.228:8080/static/" + this.item.filepath
         console.log(url)
-        this.audio.loadAsync({uri: url}).catch((err) => {
-          console.log(err);
-        });
+        try {
+          await this.audio.loadAsync({uri: url});
+        } catch (err) {
+          console.log(err)
+        }
 
     }
 
