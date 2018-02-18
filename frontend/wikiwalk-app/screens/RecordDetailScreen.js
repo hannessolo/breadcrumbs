@@ -76,7 +76,7 @@ export default class RecordDetailScreen extends React.Component {
       name: "recording.m4a",
       type: "audio/m4a"
     }
-);
+    );
 
     console.log(formData)
     fetch(this.SAVE_FILE_URL, {
