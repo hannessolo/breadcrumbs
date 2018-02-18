@@ -118,9 +118,9 @@ export default class RecordDetailScreen extends React.Component {
 
 const RECORDING_OPTIONS_PRESET_LOW_QUALITY: RecordingOptions = {
   android: {
-    extension: '.3gp',
-    outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_THREE_GPP,
-    audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AMR_NB,
+    extension: '.m4a',
+    outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+    audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_HE_AAC,
     sampleRate: 44100,
     numberOfChannels: 2,
     bitRate: 128000,

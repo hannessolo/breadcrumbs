@@ -32,14 +32,14 @@ export default TabNavigator(
             iconName =
               Platform.OS === 'ios'
                 ? `ios-map${focused ? '' : '-outline'}`
-                : 'map';
+                : 'ios-map';
             break;
           case 'Listen':
             iconName = Platform.OS === 'ios' ? `ios-megaphone${focused ? '' : '-outline'}` : 'ios-megaphone';
             break;
           case 'Record':
             iconName =
-              Platform.OS === 'ios' ? `ios-recording${focused ? '' : '-outline'}` : 'record-voice-over';
+              Platform.OS === 'ios' ? `ios-recording${focused ? '' : '-outline'}` : 'ios-recording';
         }
         return (
           <Ionicons

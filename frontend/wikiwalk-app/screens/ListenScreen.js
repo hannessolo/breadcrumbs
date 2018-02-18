@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, View, ScrollView, StyleSheet, Text, Alert, FlatList } from 'react-native';
+import { Button, View, ScrollView, StyleSheet, Text, FlatList } from 'react-native';
 import { Permissions, Location } from 'expo';
 
 export default class ListenScreen extends React.Component {
@@ -27,7 +27,7 @@ export default class ListenScreen extends React.Component {
         errorMessage: 'Permission to access location was denied',
       });
     }
-    let location = await Location.getCurrentPositionAsync({});
+    let location = await Location.getCurrentPositionAsync({maximumAge : 10000});
     this.setState({ location: location });
 
     if (location != null) {
@@ -47,16 +47,14 @@ export default class ListenScreen extends React.Component {
       }).then((res) => {
         this.setState({ landmarks: res["locations"] });
       }).catch((err) => {
-        Alert.alert();
       });
 
     } else {
-      Alert.alert("An error occured");
     }
     
   };
 
-  componentWillMount() {
+  componentDidMount() {
 
     this._getLocationAsync();
 

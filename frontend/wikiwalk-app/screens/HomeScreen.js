@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapView, Permissions, Location } from 'expo';
-import { View, Alert, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { Marker } from 'react-native-maps';
 
 import { MonoText } from '../components/StyledText';
@@ -25,28 +25,35 @@ export default class HomeScreen extends React.Component {
 
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    console.log("mountmi")
     this._getLocationAsync();
   }
 
   componentDidUpdate() {
     if (this.state.errorMessage != null) {
-      Alert.alert(this.state.errorMessage);
     }
   }
 
+  
   async _getLocationAsync() {
+    console.log("waiting for perms")
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    console.log("perms gotten")
     if (status !== 'granted') {
+      console.log(status)
       this.setState({
         errorMessage: 'Permission to access location was denied',
       });
     }
-    let location = await Location.getCurrentPositionAsync({});
+    console.log(status)
+    let location = await Location.getCurrentPositionAsync({maximumAge : 100000});
+    console.log(location)
     this.setState({ location: location });
 
     if (location != null) {
 
+      console.log("Will fetch now memes");
       fetch(this.LANDMARKS_URL, {
       method: 'POST',
       headers: {
@@ -61,12 +68,11 @@ export default class HomeScreen extends React.Component {
         return res.json();
       }).then((res) => {
         this.setState({ landmarks: res["locations"] });
+        console.log("memes fetched");
       }).catch((err) => {
-        Alert.alert();
       });
 
     } else {
-      Alert.alert("An error occured");
     }
   };
 
@@ -88,6 +94,7 @@ export default class HomeScreen extends React.Component {
               longitude: marker.lon
             }}
             title={marker.name}
+            key={Math.random()}
             description=""
           />
         ))}

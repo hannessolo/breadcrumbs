@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Button, Text, TouchableHighlight } from 'react-native';
-import {Audio} from 'expo';
+import { Audio, MapView } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
 export default class PlaybackScreen extends React.Component {
@@ -92,9 +92,7 @@ export default class PlaybackScreen extends React.Component {
                   </TouchableHighlight>
                 </View>
 
-
               </View>
-              <Text>{this.state.isPlayingAudio && this.state.text}</Text>
           </View>
 
       );
