@@ -38,15 +38,6 @@ export default class RecordDetailScreen extends React.Component {
     });
   }
 
-
-  componentDidUpdate() {
-    if (this.state.isRecordingAudio) {
-      this._startRecording();
-    } else {
-      this._stopRecording();
-    }
-  }
-
   async _startRecording() {
     this.recording = new Audio.Recording();
     try {
@@ -94,6 +85,14 @@ export default class RecordDetailScreen extends React.Component {
   }
 
   _onRecordButtonPress() {
+
+    let isRecordingAudio = !this.state.isRecordingAudio;
+
+    if (isRecordingAudio) {
+      this._startRecording();
+    } else {
+      this._stopRecording();
+    }
     this.setState(prev => {
       return {
         isRecordingAudio: !prev.isRecordingAudio
