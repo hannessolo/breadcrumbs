@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Text, View, ScrollView, StyleSheet, Button } from 'react-native';
-import { Audio, FileSystem } from 'expo';
+import { Audio, FileSystem, MailComposer } from 'expo';
 
 export default class RecordDetailScreen extends React.Component {
   static navigationOptions = {
@@ -21,6 +21,8 @@ export default class RecordDetailScreen extends React.Component {
 
   async componentWillMount() {
     console.log("enableing audio");
+    console.log(FileSystem.documentDirectory);
+    console.log(FileSystem.cacheDirectory);
     await Audio.setAudioModeAsync({
       playsInSilentModeIOS: true,
       allowsRecordingIOS: true,
@@ -41,11 +43,8 @@ export default class RecordDetailScreen extends React.Component {
 
   async _startRecording() {
     try {
-      console.log(await this.recording.getStatusAsync())
       await this.recording.prepareToRecordAsync(RECORDING_OPTIONS_PRESET_LOW_QUALITY);
-      console.log(await this.recording.getStatusAsync())
       await this.recording.startAsync();
-      console.log(await this.recording.getStatusAsync())
       // You are now recording!
     } catch (error) {
       console.log(error)
@@ -58,12 +57,33 @@ export default class RecordDetailScreen extends React.Component {
     } catch (error) {
 
     }
-    console.log(await this.recording.getStatusAsync())
-    console.log(this.recording.getURI())
-    console.log(JSON.stingify(await FileSystem.getInfoAsync(this.recording.getURI)))
-    let fileString = await FileSystem.readAsStringAsync(this.recording.getURI())
-    console.log(fileString)
-    FileSystem.deleteAsync(this.recording.getURI())
+
+    const info = await FileSystem.getInfoAsync(this.recording.getURI());
+    console.log(`FILE INFO: ${JSON.stringify(info)}`);
+
+    console.log(info.uri);
+
+    const formData = new FormData()
+    formData.append('file', {
+      uri: info.uri,
+      name: "recording.m4a",
+      type: "audio/m4a"
+    }
+);
+
+    console.log(formData)
+    fetch(this.SAVE_FILE_URL, {
+      headers: {
+        placeID: this.item.placeID,
+        tourTitle: "troll",
+        'Content-Type': 'multipart/form-data'
+      },
+      method: 'POST',
+      body: formData,
+    }).then(res => console.log(res))
+    .catch(err => console.log(err))
+
+    await FileSystem.deleteAsync(this.recording.getURI())
   }
 
   _sendRecording(fileString) {

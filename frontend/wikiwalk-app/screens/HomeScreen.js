@@ -12,6 +12,8 @@ export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log("constructor")
+
     this.state = {
       location: null,
       errorMessage: null,
@@ -20,6 +22,7 @@ export default class HomeScreen extends React.Component {
   }
 
   componentWillMount() {
+    console.log("Lolol")
     this._getLocationAsync();
   }
 
@@ -30,13 +33,17 @@ export default class HomeScreen extends React.Component {
   }
 
   async _getLocationAsync() {
+    console.log("entered function")
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
+      console.log("Failed")
       this.setState({
         errorMessage: 'Permission to access location was denied',
       });
     }
+    console.log("got perm")
     let location = await Location.getCurrentPositionAsync({});
+    console.log(location.coords.longitude)
     this.setState({ location: location });
   };
 
