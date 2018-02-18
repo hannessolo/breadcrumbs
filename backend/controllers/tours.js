@@ -22,7 +22,7 @@ exports.createEntry = (req, res) => {
   const title = req.get('tourTitle');
   let index;
   var oldData = [];
-  const fileName = fs.readdirSync('./data/temp')[0];
+  const fileName = fs.readdirSync('./data/temp/')[0];
 
   if (!fs.existsSync(dir + place_id)){
     fs.mkdirSync(dir + place_id);
