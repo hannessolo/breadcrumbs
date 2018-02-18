@@ -1,7 +1,7 @@
 const dir = './data/landmarks/';
 const Client = require('node-rest-client').Client;
 const client = new Client();
-const textToSpeechAPI = 'ad9f51d8690e4ab0ac046f441a013edd';
+const textToSpeechAPI = 'd5537ddec597441e982b802e882dfc44';
 const fs = require('fs');
 var request = require('request');
 
@@ -21,7 +21,7 @@ exports.getTours = (req, res) => {
     }
 
     var prm1 = new Promise((res, rej) => {
-      createIntroAudio(loc, place_id, 220, (isTrue) => {
+      createIntroAudio(loc, place_id, 200, (isTrue) => {
         res(isTrue);
       });
     });
@@ -138,8 +138,6 @@ function createIntroAudio(loc, placeID, wordLimit, callback){
       console.log("Null value?");
       callback (false);
     } else {
-
-
     let extract = JSON.stringify(values[0].extract).replace(/<\/?[^>]+(>|$)/g, "").replace(/\\n/g, ' ');
     extract = WordCount(extract, wordLimit);
 
@@ -148,8 +146,9 @@ function createIntroAudio(loc, placeID, wordLimit, callback){
       console.log(musicLink);
       fs.writeFileSync('./data/landmarks/' + place_id + '/intro.mp3', data);
       if (fs.statSync('./data/landmarks/' + place_id + '/intro.mp3').size < 10000){
+        console.log("Too small?");
         fs.unlinkSync('./data/landmarks/' + place_id + '/intro.mp3');
-        createIntroAudio(loc, placeID, wordLimit - 10, callback);
+        callback(false);
       } else {
         callback (true);
       }
