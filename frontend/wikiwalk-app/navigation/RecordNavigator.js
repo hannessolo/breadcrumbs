@@ -4,6 +4,7 @@ import {StackNavigator} from 'react-navigation';
 import RecordScreen from '../screens/RecordScreen.js';
 import RecordDetailScreen from '../screens/RecordDetailScreen.js';
 
+
 const RecordStackNavigator = StackNavigator({
     RecordOverview: { screen: RecordScreen },
     RecordSpecific: { screen: RecordDetailScreen },
