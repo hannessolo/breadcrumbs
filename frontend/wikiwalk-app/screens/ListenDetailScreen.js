@@ -55,7 +55,7 @@ export default class ListenDetailScreen extends React.Component {
           keyExtractor={this._keyExtractor}
           renderItem={({item}) => (<View style={styles.row}>
             <Text style={{fontWeight: "bold", textAlign: "center"}}>{item.title}</Text>
-            <Button title="View" onPress={() => navigate("ListenPlayback", {tour: item})}/>
+            <Button title="View" onPress={() => navigate("ListenPlayback", {tour: item, loc: this.props.navigation.state.params.location.placeID})}/>
           </View>)}
         /> 
       </ScrollView>
@@ -72,6 +72,9 @@ const styles = StyleSheet.create({
   row: {
     padding: 15,
     marginBottom: 5,
+    marginRight: 10,
+    marginLeft: 10,
+    borderRadius: 5,
     backgroundColor: '#fff',
   },
 });

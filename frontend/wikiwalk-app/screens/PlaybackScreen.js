@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Button, Text } from 'react-native';
+import { View, StyleSheet, Button, Text, TouchableHighlight } from 'react-native';
 import {Audio} from 'expo';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class PlaybackScreen extends React.Component {
   static navigationOptions = {
@@ -11,6 +12,8 @@ export default class PlaybackScreen extends React.Component {
         super(props);
         this.state = { isPlayingAudio: false, text: "Is Playing Audio" }
         this._onButtonPress = this._onButtonPress.bind(this);
+        this._onUpvote = this._onUpvote.bind(this);
+        this._onDownvote = this._onDownvote.bind(this);
         this.audio = new Audio.Sound();
         this.item = this.props.navigation.state.params.tour;
     }
@@ -18,7 +21,10 @@ export default class PlaybackScreen extends React.Component {
     componentDidMount() {
         this.audio = new Audio.Sound();
         let url = "http://35.178.74.228:8080/static/" + this.item.filepath
-        this.audio.loadAsync({uri: url});
+        console.log(url)
+        this.audio.loadAsync({uri: url}).catch((err) => {
+          console.log(err);
+        });
 
     }
 
@@ -34,6 +40,14 @@ export default class PlaybackScreen extends React.Component {
         }
     }
 
+    _onUpvote() {
+      fetch("http://35.178.74.228:8080/tours/" + this.props.navigation.state.params.loc + "/" + this.item.id + "/up")
+    }
+
+    _onDownvote() {
+      fetch("http://35.178.74.228:8080/tours/" + this.props.navigation.state.params.loc + "/" + this.item.id + "/down")
+    }
+
 
     _onButtonPress() {
         this.setState(prev => {
@@ -47,6 +61,20 @@ export default class PlaybackScreen extends React.Component {
           <View>
               <Text style={styles.title}>{this.item.title}</Text>
               <Button style={styles.buttonStyle} onPress={this._onButtonPress} title="Play Recording"/>
+              <View style={styles.votePanel}>
+
+                <Text style={{fontSize: 18}}>Upvotes: {this.item.rating}</Text>
+                <View>
+                  <TouchableHighlight onPress={this._onUpvote}>
+                    <Ionicons size={32} name="ios-arrow-up"/>
+                  </TouchableHighlight>
+                  <TouchableHighlight onPress={this._onDownvote}>
+                    <Ionicons size={32} name="ios-arrow-down"/>
+                  </TouchableHighlight>
+                </View>
+
+
+              </View>
               <Text>{this.state.isPlayingAudio && this.state.text}</Text>
           </View>
 
@@ -69,6 +97,14 @@ const styles = StyleSheet.create({
   buttonStyle: {
     marginTop: 30,
     borderStyle: 'solid',
-
+  },
+  votePanel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#efefef',
+    margin: 10,
+    padding: 20,
+    borderRadius: 5
   }
 });

@@ -98,6 +98,9 @@ const styles = StyleSheet.create({
   row: {
     padding: 15,
     marginBottom: 5,
+    marginRight: 10,
+    marginLeft: 10,
+    borderRadius: 5,
     backgroundColor: '#fff',
   },
 });
