@@ -15,7 +15,7 @@ exports.getTours = (req, res) => {
       tours: [{
         id: 'intro',
         title: '[Generated] Basic tour',
-        filepath: dir + place_id + '/intro.mp3',
+        filepath: 'data/landmarks/' + place_id + '/intro.mp3',
         rating: 0
       }]
     }
