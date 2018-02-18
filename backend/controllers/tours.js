@@ -134,7 +134,7 @@ function createIntroAudio(loc, placeID, wordLimit, callback){
 
   client.get(searchString, '', function (data, response) {
     var values = Object.values(data.query.pages);
-    if (values[0].extract.length < 10 || values[0].extract == undefined){
+    if (values[0].extract == undefined){
       console.log("Null value?");
       callback (false);
     } else {
@@ -143,10 +143,9 @@ function createIntroAudio(loc, placeID, wordLimit, callback){
 
     var musicLink = 'http://api.voicerss.org/?key=' + textToSpeechAPI + '&hl=en-us&src=' + extract;
     client.get(musicLink, '', function(data, response) {
-      console.log(musicLink);
       fs.writeFileSync('./data/landmarks/' + place_id + '/intro.mp3', data);
       if (fs.statSync('./data/landmarks/' + place_id + '/intro.mp3').size < 10000){
-        console.log("Too small?");
+        console.log(data);
         fs.unlinkSync('./data/landmarks/' + place_id + '/intro.mp3');
         callback(false);
       } else {
