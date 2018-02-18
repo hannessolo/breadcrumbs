@@ -1,6 +1,7 @@
 import React from 'react';
 import { Alert, Text, View, ScrollView, StyleSheet, Button, TextInput } from 'react-native';
 import { Audio, FileSystem, MailComposer } from 'expo';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class RecordDetailScreen extends React.Component {
   static navigationOptions = {
@@ -102,11 +103,13 @@ export default class RecordDetailScreen extends React.Component {
 
   render() {
     return <View>
+      <Text style={styles.title}>New Recording</Text>
       <Button title="Record Me"
       onPress={this._onRecordButtonPress}/>
-      <Text style={{padding: 20}}>{this.state.isRecordingAudio ? "Recording" : "Not recording"}</Text>
+      <View style={styles.iconContainer}>{this.state.isRecordingAudio ? 
+        <Ionicons size={32} name="ios-mic"/> : <Ionicons name="ios-mic-off" size={32}/>}</View>
       <TextInput
-        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+        style={{height: 40, borderColor: 'gray', borderWidth: 1, padding: 5, margin: 20}}
         onChangeText={(title) => this.setState({title})}
         value={this.state.title}
       />
@@ -141,5 +144,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 15,
     backgroundColor: '#fff',
-  },
+  },title: {
+    textAlign: 'center',
+    padding: 20,
+    fontSize: 30,
+    fontWeight: 'bold'
+  },iconContainer: {
+    flexDirection: "row",
+    justifyContent: "center"
+  }
 });

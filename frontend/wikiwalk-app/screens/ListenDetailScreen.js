@@ -54,7 +54,7 @@ export default class ListenDetailScreen extends React.Component {
           data={this.state.tours}
           keyExtractor={this._keyExtractor}
           renderItem={({item}) => (<View style={styles.row}>
-            <Text>{item.title}</Text>
+            <Text style={{fontWeight: "bold", textAlign: "center"}}>{item.title}</Text>
             <Button title="View" onPress={() => navigate("ListenPlayback", {tour: item})}/>
           </View>)}
         /> 

@@ -31,15 +31,15 @@ export default TabNavigator(
           case 'Home':
             iconName =
               Platform.OS === 'ios'
-                ? `ios-information-circle${focused ? '' : '-outline'}`
-                : 'md-information-circle';
+                ? `ios-map${focused ? '' : '-outline'}`
+                : 'map';
             break;
           case 'Listen':
-            iconName = Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link';
+            iconName = Platform.OS === 'ios' ? `ios-megaphone${focused ? '' : '-outline'}` : 'ios-megaphone';
             break;
           case 'Record':
             iconName =
-              Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options';
+              Platform.OS === 'ios' ? `ios-recording${focused ? '' : '-outline'}` : 'record-voice-over';
         }
         return (
           <Ionicons
