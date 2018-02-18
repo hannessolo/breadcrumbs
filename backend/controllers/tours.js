@@ -28,14 +28,19 @@ exports.getTours = (req, res) => {
     prm1.then((isNotEmpty) => {
       if (isNotEmpty){
         console.log("Waited")
-        fs.writeFileSync(dir + place_id +'/entries.json', JSON.stringify(output.tours));
+        fs.writeFileSync(dir + place_id +'/entries.json', JSON.stringify([{
+          id: 'intro',
+          title: '[Generated] Basic tour',
+          filepath: 'landmarks/' + place_id + '/intro.mp3',
+          rating: 0
+        }]));
         res.send(output);
       } else {
         console.log("Didnt wait wtf? "+ isNotEmpty);
         output = {
           tours:[]
         }
-        fs.writeFileSync(dir + place_id +'/entries.json', JSON.stringify(output.tours));
+        fs.writeFileSync(dir + place_id +'/entries.json', JSON.stringify([]));
         res.send(output);
       }
 
@@ -129,10 +134,12 @@ function createIntroAudio(loc, placeID, wordLimit, callback){
 
   client.get(searchString, '', function (data, response) {
     var values = Object.values(data.query.pages);
-    if (values[0].extract == null){
+    if (values[0].extract.length < 10 || values[0].extract == undefined){
       console.log("Null value?");
       callback (false);
-    }
+    } else {
+
+
     let extract = JSON.stringify(values[0].extract).replace(/<\/?[^>]+(>|$)/g, "").replace(/\\n/g, ' ');
     extract = WordCount(extract, wordLimit);
 
@@ -146,7 +153,7 @@ function createIntroAudio(loc, placeID, wordLimit, callback){
       } else {
         callback (true);
       }
-    })
+    })}
   });
 }
 
